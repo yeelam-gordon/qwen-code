@@ -39,6 +39,7 @@ const debugLogger = createDebugLogger('NON_INTERACTIVE_COMMANDS');
  * - compress: Compress conversation history
  * - export: Export current session to a file
  * - context: Show context window usage (read-only diagnostic)
+ * - doctor: Run installation and environment diagnostics (read-only diagnostic)
  */
 export const ALLOWED_BUILTIN_COMMANDS_NON_INTERACTIVE = [
   'init',
@@ -48,6 +49,7 @@ export const ALLOWED_BUILTIN_COMMANDS_NON_INTERACTIVE = [
   'btw',
   'bug',
   'context',
+  'doctor',
 ] as const;
 
 /**
