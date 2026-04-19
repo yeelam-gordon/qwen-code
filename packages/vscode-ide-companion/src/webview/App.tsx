@@ -924,12 +924,10 @@ export const App: React.FC = () => {
     });
   }, [vscode]);
 
-  // Handle toggle edit mode (Default -> Auto-edit -> YOLO -> Default)
   const handleToggleEditMode = useCallback(() => {
     setEditMode((prev) => {
       const next: ApprovalModeValue = NEXT_APPROVAL_MODE[prev];
 
-      // Notify extension to set approval mode via ACP
       try {
         vscode.postMessage({
           type: 'setApprovalMode',
@@ -941,6 +939,22 @@ export const App: React.FC = () => {
       return next;
     });
   }, [vscode]);
+
+  // Handle Tab key to cycle approval modes when input is focused
+  const handleInputKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (
+        e.key === 'Tab' &&
+        !e.shiftKey &&
+        !isComposing &&
+        !completion.isOpen
+      ) {
+        e.preventDefault();
+        handleToggleEditMode();
+      }
+    },
+    [completion.isOpen, handleToggleEditMode, isComposing],
+  );
 
   const handleToggleThinking = useCallback(() => {
     setThinkingEnabled((prev) => !prev);
@@ -1112,7 +1126,7 @@ export const App: React.FC = () => {
           onInputChange={setInputText}
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={() => setIsComposing(false)}
-          onKeyDown={() => {}}
+          onKeyDown={handleInputKeyDown}
           onSubmit={handleSubmitWithScroll}
           onCancel={handleCancel}
           onToggleEditMode={handleToggleEditMode}
